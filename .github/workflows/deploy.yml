@@ -7,7 +7,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write  # 这行很重要，它给予写入权限
     steps:
       - uses: actions/checkout@v2
 
@@ -20,7 +21,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build  # 使用标准的构建命令
+        run: npm run build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
