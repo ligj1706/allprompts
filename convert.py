@@ -8,6 +8,11 @@ def ensure_dir(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
+def process_text(text):
+    # 将连续的换行符替换为单个换行符，然后分割成段落
+    paragraphs = [p.strip() for p in text.replace('\n\n', '\n').split('\n') if p.strip()]
+    return paragraphs
+
 def convert_csv_to_json_chunks():
     ensure_dir('public/data')
     
@@ -17,10 +22,12 @@ def convert_csv_to_json_chunks():
     with open('prompts.csv', 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for i, row in enumerate(reader):
+            title = row['actor']
+            content = process_text(row['prompt'])
             prompts.append({
                 'id': i,
-                'actor': row['actor'],
-                'prompt': row['prompt']
+                'title': title,
+                'content': content
             })
             
             if len(prompts) == CHUNK_SIZE:
