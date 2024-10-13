@@ -108,11 +108,7 @@ onMounted(() => {
 });
 </script>
 
-<style>
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
+<style scoped>
 .search-container {
   display: flex;
 }
