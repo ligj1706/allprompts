@@ -3,7 +3,7 @@
     <header class="text-center mb-8">
       <img src="./assets/logo.svg" alt="AllPrompt Logo" class="w-40 mx-auto mb-4">
       <h1 class="text-4xl font-bold text-gray-800 mb-2">AllPrompt</h1>
-      <p class="text-xl text-gray-600">Find your perfect prompt in one click</p>
+      <p class="text-xl text-gray-600">Unlock creativity with curated AI prompts</p>
     </header>
 
     <div class="search-container mb-8">
@@ -47,8 +47,9 @@
     </div>
 
     <footer class="mt-12 text-center text-gray-600">
-      <p>Prompts are collected from public sources. For copyright issues, please contact mscreate358@gmail.com</p>
-      <p>Want to contribute? Send your prompts to the same email!</p>
+      <p>
+       Prompts sourced from public domain. For copyright inquiries or contributions, contact: mscreate358@gmail.com
+      </p>
     </footer>
   </div>
 </template>
@@ -60,7 +61,7 @@ import PromptCard from './components/PromptCard.vue';
 const prompts = ref([]);
 const searchText = ref('');
 const currentPage = ref(1);
-const itemsPerPage = 51;
+const itemsPerPage = 30;
 
 const displayPrompts = computed(() => {
   let filtered = searchText.value

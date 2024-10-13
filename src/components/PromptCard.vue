@@ -55,7 +55,7 @@ function copyPrompt() {
     copied.value = true;
     setTimeout(() => {
       copied.value = false;
-    }, 300); // 2秒后恢复按钮状态
+    }, 300); // 300豪秒后恢复按钮状态
   });
 }
 </script>
@@ -63,7 +63,7 @@ function copyPrompt() {
 <style scoped>
 .line-clamp-3 {
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 3; /* 修改为 5 行 */
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
