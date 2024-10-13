@@ -1,133 +1,127 @@
 <template>
-  <div class="container">
-    <div class="header">
-      <img :src="logoPath" alt="AllPrompts Logo" class="logo">
-      <h1>AllPrompts</h1>
+  <div class="container mx-auto px-4 py-8 bg-gray-100 min-h-screen">
+    <header class="text-center mb-8">
+      <img src="./assets/logo.svg" alt="AllPrompt Logo" class="w-40 mx-auto mb-4">
+      <h1 class="text-4xl font-bold text-gray-800 mb-2">AllPrompt</h1>
+      <p class="text-xl text-gray-600">Find your perfect prompt in one click</p>
+    </header>
+
+    <div class="search-container mb-8">
+      <input 
+        type="text" 
+        v-model="searchText" 
+        @input="handleSearch"
+        placeholder="Search prompts..."
+        class="w-full p-3 rounded-l-lg border-2 border-gray-300 focus:outline-none focus:border-purple-500"
+      >
+      <button @click="handleSearch" class="bg-purple-500 text-white p-3 rounded-r-lg hover:bg-purple-600 transition duration-300">
+        Search
+      </button>
     </div>
-    <input 
-      v-model="searchText" 
-      @input="handleSearch"
-      placeholder="Search prompts..."
-      class="search-input"
-    />
-    <div class="cards-container">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <PromptCard
         v-for="prompt in displayPrompts"
         :key="prompt.id"
-        :title="prompt.title"
-        :content="prompt.content"
+        :actor="prompt.actor"
+        :prompt="prompt.prompt"
       />
     </div>
-    <div v-if="loading" class="loading">Loading...</div>
+
+    <div class="pagination mt-8 flex justify-center items-center">
+      <button 
+        @click="prevPage" 
+        :disabled="currentPage === 1"
+        class="px-4 py-2 bg-purple-500 text-white rounded-l-lg disabled:opacity-50"
+      >
+        Previous
+      </button>
+      <span class="px-4 py-2 bg-white">{{ currentPage }} / {{ totalPages }}</span>
+      <button 
+        @click="nextPage" 
+        :disabled="currentPage === totalPages"
+        class="px-4 py-2 bg-purple-500 text-white rounded-r-lg disabled:opacity-50"
+      >
+        Next
+      </button>
+    </div>
+
+    <footer class="mt-12 text-center text-gray-600">
+      <p>Prompts are collected from public sources. For copyright issues, please contact mscreate358@gmail.com</p>
+      <p>Want to contribute? Send your prompts to the same email!</p>
+    </footer>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import PromptCard from './components/PromptCard.vue';
 
 const prompts = ref([]);
-const displayPrompts = ref([]);
-const loading = ref(false);
 const searchText = ref('');
-const currentChunk = ref(0);
-const totalChunks = ref(0);
+const currentPage = ref(1);
+const itemsPerPage = 51;
 
-const basePath = import.meta.env.MODE === 'production' ? '/allprompts/' : '/';
-const logoPath = computed(() => `${basePath}assets/logo.svg`);
-
-async function init() {
-  try {
-    const response = await fetch(`${basePath}data/index.json`);
-    const data = await response.json();
-    totalChunks.value = data.totalChunks;
-    loadNextChunk();
-  } catch (error) {
-    console.error('Failed to load index:', error);
+const displayPrompts = computed(() => {
+  let filtered = searchText.value
+    ? prompts.value.filter(p => 
+        p.actor.toLowerCase().includes(searchText.value.toLowerCase()) || 
+        p.prompt.toLowerCase().includes(searchText.value.toLowerCase())
+      )
+    : prompts.value;
+  
+  if (searchText.value) {
+    return filtered.slice(0, 9);
   }
+  
+  const start = (currentPage.value - 1) * itemsPerPage;
+  return filtered.slice(start, start + itemsPerPage);
+});
+
+const totalPages = computed(() => 
+  Math.ceil(prompts.value.length / itemsPerPage)
+);
+
+function prevPage() {
+  if (currentPage.value > 1) currentPage.value--;
 }
 
-async function loadNextChunk() {
-  if (loading.value || currentChunk.value >= totalChunks.value) return;
-  
-  loading.value = true;
+function nextPage() {
+  if (currentPage.value < totalPages.value) currentPage.value++;
+}
+
+async function loadPrompts() {
   try {
-    const response = await fetch(`${basePath}data/chunk_${currentChunk.value}.json`);
-    const data = await response.json();
-    prompts.value = [...prompts.value, ...data];
-    if (!searchText.value) {
-      displayPrompts.value = prompts.value;
-    }
-    currentChunk.value++;
+    const response = await fetch('/allprompts/data/prompts.json');
+    prompts.value = await response.json();
   } catch (error) {
-    console.error('Failed to load chunk:', error);
+    console.error('Failed to load prompts:', error);
   }
-  loading.value = false;
 }
 
 function handleSearch() {
-  const search = searchText.value.toLowerCase();
-  displayPrompts.value = prompts.value
-    .filter(p => 
-      p.title.toLowerCase().includes(search) || 
-      p.content.some(paragraph => paragraph.toLowerCase().includes(search))
-    )
-    .slice(0, 7);  // 只显示最相关的7条结果
-}
-
-function handleScroll() {
-  if (
-    window.innerHeight + window.scrollY >= 
-    document.body.offsetHeight - 500
-  ) {
-    loadNextChunk();
-  }
+  currentPage.value = 1;
 }
 
 onMounted(() => {
-  init();
-  window.addEventListener('scroll', handleScroll);
-});
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
+  loadPrompts();
 });
 </script>
 
-<style scoped>
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
-.header {
+<style>
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+.search-container {
   display: flex;
-  align-items: center;
-  margin-bottom: 20px;
 }
-.logo {
-  width: 50px;
-  height: 50px;
-  margin-right: 10px;
+
+.search-container input {
+  flex-grow: 1;
 }
-h1 {
-  color: #2c3e50;
-}
-.search-input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-.cards-container {
-  display: flex;
-  flex-direction: column;
-}
-.loading {
-  text-align: center;
-  margin-top: 20px;
-  color: #7f8c8d;
+
+.search-container button {
+  white-space: nowrap;
 }
 </style>
