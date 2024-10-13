@@ -93,7 +93,7 @@ function nextPage() {
 
 async function loadPrompts() {
   try {
-    const response = await fetch('/allprompts/data/prompts.json');
+    const response = await fetch('/data/prompts.json');
     prompts.value = await response.json();
   } catch (error) {
     console.error('Failed to load prompts:', error);
