@@ -2,8 +2,6 @@
 
 AllPrompt is a web application that allows users to discover and copy high-quality prompts for AI projects. With a user-friendly interface and a vast collection of prompts, AllPrompt aims to enhance creativity and productivity for AI enthusiasts and professionals alike.
 
-![AllPrompt Logo](src/assets/logo.svg)
-
 ## Features
 
 - **Extensive Prompt Collection**: Access a curated database of diverse prompts for various AI applications.
