@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import PromptCard from './components/PromptCard.vue';
 
 const prompts = ref([]);
@@ -92,6 +92,23 @@ const displayPrompts = computed(() => {
 const totalPages = computed(() => 
   Math.ceil(prompts.value.length / itemsPerPage)
 );
+
+const updateMetaTags = () => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage + 1;
+  const endIndex = Math.min(startIndex + itemsPerPage - 1, prompts.value.length);
+  
+  document.title = `AI Prompts Page ${currentPage.value} | AllPrompt`;
+  
+  const descriptionMeta = document.querySelector('meta[name="description"]');
+  if (descriptionMeta) {
+    descriptionMeta.setAttribute('content', `Explore AI prompts ${startIndex}-${endIndex} out of ${prompts.value.length}. Find the perfect prompt for your AI project on AllPrompt.`);
+  }
+};
+
+watch(currentPage, updateMetaTags);
+onMounted(() => {
+  loadPrompts().then(updateMetaTags);
+});
 
 function prevPage() {
   if (currentPage.value > 1) currentPage.value--;
