@@ -19,7 +19,16 @@
       </button>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Skeleton loader -->
+    <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-for="i in 9" :key="i" class="bg-white p-6 rounded-lg shadow-md animate-pulse">
+        <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+        <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+      </div>
+    </div>
+
+    <!-- Prompt cards -->
+    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <PromptCard
         v-for="prompt in displayPrompts"
         :key="prompt.id"
@@ -48,20 +57,21 @@
 
     <footer class="mt-12 text-center text-gray-600">
       <p>
-       Prompts sourced from public domain. For copyright inquiries or contributions, contact: mscreate358@gmail.com
+        Prompts sourced from public domain. For copyright inquiries or contributions, contact: mscreate358@gmail.com
       </p>
     </footer>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import PromptCard from './components/PromptCard.vue';
 
 const prompts = ref([]);
+const loading = ref(true);
 const searchText = ref('');
 const currentPage = ref(1);
-const itemsPerPage = 30;
+const itemsPerPage = 30; // Keep original value
 
 const displayPrompts = computed(() => {
   let filtered = searchText.value
@@ -93,10 +103,18 @@ function nextPage() {
 
 async function loadPrompts() {
   try {
-    const response = await fetch('/data/prompts.json');
-    prompts.value = await response.json();
+    const response = await fetch('/data/prompts.json'); // Keep original path
+    const allPrompts = await response.json();
+    prompts.value = allPrompts.slice(0, 300); // Load first 300 prompts initially
+    loading.value = false;
+
+    // Load the rest of the prompts after a delay
+    setTimeout(() => {
+      prompts.value = allPrompts;
+    }, 2000);
   } catch (error) {
     console.error('Failed to load prompts:', error);
+    loading.value = false;
   }
 }
 
