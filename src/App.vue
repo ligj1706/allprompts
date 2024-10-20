@@ -117,7 +117,7 @@ function nextPage() {
 
 async function loadPrompts() {
   try {
-    const response = await fetch('/allprompts/data/prompts.json');
+    const response = await fetch('./data/prompts.json');
     const data = await response.json();
     prompts.value = data.slice(0, 150); // Load first 300 prompts initially
     loading.value = false;
