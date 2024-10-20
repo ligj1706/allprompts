@@ -1,10 +1,10 @@
 # AllPrompt
 
-AllPrompt is a web application that allows users to discover and copy high-quality prompts for AI projects. With a user-friendly interface and a vast collection of prompts, AllPrompt aims to enhance creativity and productivity for AI enthusiasts and professionals alike.
+AllPrompt is a comprehensive web application designed to help users discover and utilize high-quality prompts for AI projects. With an impressive collection of over 35,000 curated prompts, AllPrompt aims to boost creativity and productivity for AI enthusiasts and professionals alike.
 
 ## Features
 
-- **Extensive Prompt Collection**: Access a curated database of diverse prompts for various AI applications.
+- **Extensive Prompt Collection**: Access our vast database of 35,000+ diverse prompts for various AI applications.
 - **Easy Search**: Quickly find relevant prompts using our efficient search functionality.
 - **User-Friendly Interface**: Navigate through prompts with a clean, intuitive design.
 - **Copy with One Click**: Easily copy any prompt to your clipboard with a single button press.
@@ -21,16 +21,20 @@ AllPrompt is a web application that allows users to discover and copy high-quali
 
 ## Contributing
 
-We welcome contributions to AllPrompt! Here's how you can help:
+We welcome contributions to AllPrompt! If you have high-quality prompts to share or want to improve the platform, please contact us at mscreate358@gmail.com.
 
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Make your changes and commit them with descriptive commit messages.
-4. Push your changes to your fork.
-5. Submit a pull request to the main repository.
+## Enhance Your AI Productivity
+
+For those interested in further improving their AI productivity skills, we recommend the book:
+
+*"AI Productivity Mastery: The Beginner's Guide to Boosting Skills and Efficiency with LLM"*
+
+Available on Amazon: [https://www.amazon.com/dp/B0DHSRTHRQ](https://www.amazon.com/dp/B0DHSRTHRQ)
+
+This guide is perfect for beginners curious about Large Language Models (LLMs). It requires no technical background and helps you quickly master the core skills of interacting with LLMs to enhance your work and life efficiency. From basic concepts to effective questioning techniques and practical application scenarios, this book provides step-by-step guidance to easily navigate Large Language Models.
 
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
 
-Find your perfect prompt in one click with AllPrompt!
+Find your perfect prompt in one click with AllPrompt and unlock the full potential of AI in your projects!

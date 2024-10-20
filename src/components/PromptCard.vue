@@ -15,12 +15,17 @@
       <div v-else></div> <!-- 占位，保持布局一致 -->
       <button 
         @click="copyPrompt" 
+        class="w-10 h-10 rounded-full flex items-center justify-center transition duration-300"
         :class="[
-          'px-4 py-2 rounded transition duration-300',
-          copied ? 'bg-gray-400 text-white' : 'bg-purple-500 text-white hover:bg-purple-600'
+          copied ? 'bg-green-500' : 'bg-purple-500 hover:bg-purple-600'
         ]"
       >
-        {{ copied ? 'Copied!' : 'Copy' }}
+        <svg v-if="copied" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+        </svg>
       </button>
     </div>
   </div>
@@ -55,7 +60,7 @@ function copyPrompt() {
     copied.value = true;
     setTimeout(() => {
       copied.value = false;
-    }, 300); // 300豪秒后恢复按钮状态
+    }, 1000); // 1秒后恢复按钮状态
   });
 }
 </script>
@@ -63,7 +68,7 @@ function copyPrompt() {
 <style scoped>
 .line-clamp-3 {
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* 修改为 5 行 */
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
