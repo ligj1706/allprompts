@@ -21,7 +21,7 @@
 
     <!-- Skeleton loader -->
     <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div v-for="i in 9" :key="i" class="bg-white p-6 rounded-lg shadow-md animate-pulse">
+      <div v-for="i in 30" :key="i" class="bg-white p-6 rounded-lg shadow-md animate-pulse">
         <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
         <div class="h-4 bg-gray-200 rounded w-1/2"></div>
       </div>
@@ -71,7 +71,7 @@ const prompts = ref([]);
 const loading = ref(true);
 const searchText = ref('');
 const currentPage = ref(1);
-const itemsPerPage = 30; // Keep original value
+const itemsPerPage = 30;
 
 const displayPrompts = computed(() => {
   let filtered = searchText.value
@@ -106,9 +106,6 @@ const updateMetaTags = () => {
 };
 
 watch(currentPage, updateMetaTags);
-onMounted(() => {
-  loadPrompts().then(updateMetaTags);
-});
 
 function prevPage() {
   if (currentPage.value > 1) currentPage.value--;
@@ -120,14 +117,15 @@ function nextPage() {
 
 async function loadPrompts() {
   try {
-    const response = await fetch('/data/prompts.json'); // Keep original path
-    const allPrompts = await response.json();
-    prompts.value = allPrompts.slice(0, 300); // Load first 300 prompts initially
+    const response = await fetch('/allprompts/data/prompts.json');
+    const data = await response.json();
+    prompts.value = data.slice(0, 150); // Load first 300 prompts initially
     loading.value = false;
 
     // Load the rest of the prompts after a delay
     setTimeout(() => {
-      prompts.value = allPrompts;
+      prompts.value = data;
+      updateMetaTags();
     }, 2000);
   } catch (error) {
     console.error('Failed to load prompts:', error);
