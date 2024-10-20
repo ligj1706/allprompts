@@ -3,7 +3,7 @@
     <header class="text-center mb-8">
       <img src="./assets/logo.svg" alt="AllPrompt Logo" class="w-40 mx-auto mb-4">
       <h1 class="text-4xl font-bold text-gray-800 mb-2">AllPrompt</h1>
-      <p class="text-xl text-gray-600">Find top prompts and boost your creativity!</p>
+      <p class="text-xl text-gray-600">35,000+ Prompts at Your Fingertips: Search, Find, Create!</p>
     </header>
 
     <div class="search-container mb-8">
