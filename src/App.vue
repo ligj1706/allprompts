@@ -66,6 +66,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
 import PromptCard from './components/PromptCard.vue';
+import logo from './assets/logo.svg'; 
 
 const prompts = ref([]);
 const loading = ref(true);
