@@ -3,5 +3,15 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   plugins: [vue()],
-  base: '/',  // 从 '/allprompts/' 改为 '/'
+  base: '/',
+  server: {
+    historyApiFallback: true
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
+    }
+  }
 })

@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Allow: /page/$
+Allow: /prompt/$
+Disallow: /page/*?*
+Disallow: /prompt/*?*
+Disallow: /*?q=*
+Disallow: /api/
+Disallow: /data/
+
+# Rate limiting
+Crawl-delay: 10
+
+# Sitemaps
+Sitemap: https://allprompt.club/sitemap.xml

@@ -207,58 +207,71 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, watch, onBeforeMount } from 'vue';
 import PromptCard from './components/PromptCard.vue';
 
+const searchText = ref('');
 const prompts = ref([]);
 const loading = ref(true);
-const searchText = ref('');
 const currentPage = ref(1);
-const itemsPerPage = 21; // Default: 7 rows x 3 columns = 21 items per page
+const itemsPerPage = 21;
 
 const displayPrompts = computed(() => {
-  let filtered = searchText.value
-    ? prompts.value.filter(p => 
-        p.actor.toLowerCase().includes(searchText.value.toLowerCase()) || 
-        p.prompt.toLowerCase().includes(searchText.value.toLowerCase())
-      )
-    : prompts.value;
-  
-  if (searchText.value) {
-    return filtered.slice(0, 9); // Show maximum 9 most relevant results when searching
-  }
-  
   const start = (currentPage.value - 1) * itemsPerPage;
-  return filtered.slice(start, start + itemsPerPage); // Show 21 items per page when not searching
+  return prompts.value.slice(start, start + itemsPerPage);
 });
 
 const totalPages = computed(() => {
-  if (searchText.value) {
-    return 1; // Single page for search results
-  }
-  return Math.ceil(prompts.value.length / itemsPerPage); // Multiple pages for normal browsing
+  return Math.ceil(prompts.value.length / itemsPerPage);
 });
 
-const updateMetaTags = () => {
-  const startIndex = (currentPage.value - 1) * itemsPerPage + 1;
-  const endIndex = Math.min(startIndex + itemsPerPage - 1, prompts.value.length);
+function updateMetaTags() {
+  const title = currentPage.value === 1 
+    ? 'AllPrompt - Professional AI Prompts Library' 
+    : `AllPrompt - Page ${currentPage.value} - Professional AI Prompts Library`;
   
-  document.title = `AI Prompts Page ${currentPage.value} | AllPrompt`;
+  document.title = title;
   
-  const descriptionMeta = document.querySelector('meta[name="description"]');
-  if (descriptionMeta) {
-    descriptionMeta.setAttribute('content', `Explore AI prompts ${startIndex}-${endIndex} out of ${prompts.value.length}. Find the perfect prompt for your AI project on AllPrompt.`);
+  const newUrl = currentPage.value === 1 
+    ? '/' 
+    : `/page/${currentPage.value}`;
+  window.history.pushState({}, '', newUrl);
+  
+  const metaDescription = document.querySelector('meta[name="description"]');
+  if (metaDescription) {
+    metaDescription.setAttribute('content', 
+      `Browse our collection of ${prompts.value.length}+ AI prompts. Page ${currentPage.value} of ${totalPages.value}.`
+    );
   }
-};
+}
 
-watch(currentPage, updateMetaTags);
+onBeforeMount(() => {
+  window.addEventListener('popstate', () => {
+    const pageMatch = window.location.pathname.match(/\/page\/(\d+)/);
+    if (pageMatch) {
+      currentPage.value = parseInt(pageMatch[1]);
+    } else {
+      currentPage.value = 1;
+    }
+  });
+});
+
+onMounted(() => {
+  const pageMatch = window.location.pathname.match(/\/page\/(\d+)/);
+  if (pageMatch) {
+    currentPage.value = parseInt(pageMatch[1]);
+  }
+  loadPrompts();
+});
 
 function prevPage() {
   if (currentPage.value > 1) currentPage.value--;
+  updateMetaTags();
 }
 
 function nextPage() {
   if (currentPage.value < totalPages.value) currentPage.value++;
+  updateMetaTags();
 }
 
 async function loadPrompts() {
@@ -277,10 +290,6 @@ async function loadPrompts() {
 function handleSearch() {
   currentPage.value = 1;
 }
-
-onMounted(() => {
-  loadPrompts();
-});
 </script>
 
 <style scoped>
